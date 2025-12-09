@@ -14,29 +14,53 @@ final class TaskListPresenter: TaskListViewOutput {
     // MARK: - Private properties
     
     private var view: TaskListViewInput
+    private var interactor: TaskListInteractorInput
     
     // MARK: - Init
     
-    init(view: TaskListViewInput) {
+    init(view: TaskListViewInput,
+         interactor: TaskListInteractorInput) {
         self.view = view
+        self.interactor = interactor
     }
     
-    func viewDidLoad() { }
+    func viewDidLoad() {
+        interactor.createDummies()
+    }
     
     // MARK: - Public functions
-    
-    func didTapTask(taskIndex: Int) { }
     
     func didTapCreateTask() { }
     
     func didPullToRefresh() { }
     
+    // MARK: - Private functions
+}
+
+// MARK: - TaskListInteractorOutput
+
+extension TaskListPresenter: TaskListInteractorOutput {
+    
+    func dataChanged(data: [TaskModel]) {
+        view.updateTasks(tasks: data)
+    }
+}
+
+// MARK: - TaskListFilterCellDelegate
+
+extension TaskListPresenter: TaskListFilterCellDelegate {
+    
     func didTapFilter(filterType: TaskState?) {
         print(filterType)
         view.updateFilter(selectedFilter: filterType)
-        // tasks -> filter
+        interactor.sortDummies(for: filterType)
     }
+}
+ 
+// MARK: - TaskListCellDelegate
+
+extension TaskListPresenter: TaskListCellDelegate {
     
-    // MARK: - Private functions
+    func didTapOnCell(cell: TaskListCell) { }
 }
 

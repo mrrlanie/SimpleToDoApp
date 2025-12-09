@@ -30,7 +30,7 @@ final class TaskListViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.showsVerticalScrollIndicator = false
-        tableView.refreshControl = refreshControl
+        //        tableView.refreshControl = refreshControl
         tableView.separatorColor = .clear
         tableView.separatorStyle = .none
         return tableView
@@ -42,6 +42,10 @@ final class TaskListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "ToDo App"
+        navigationItem.rightBarButtonItem = .init(barButtonSystemItem: .add,
+                                                  target: self,
+                                                  action: #selector(didTapAdd))
         refreshControl.addTarget(self,
                                  action: #selector(didPullToRefresh),
                                  for: .valueChanged)
@@ -56,6 +60,8 @@ final class TaskListViewController: UIViewController {
     func registerCells() {
         tableView.register(TaskListFilterCell.self,
                            forCellReuseIdentifier: "TaskListFilterCell")
+        tableView.register(TaskListCell.self,
+                           forCellReuseIdentifier: "TaskListCell")
     }
     
     func setupUI() {
@@ -64,7 +70,7 @@ final class TaskListViewController: UIViewController {
         tableView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
             make.bottom.equalTo(view.safeAreaLayoutGuide)
-            make.leading.trailing.equalToSuperview().inset(16)
+            make.leading.trailing.equalToSuperview()
         }
     }
     
@@ -75,6 +81,9 @@ final class TaskListViewController: UIViewController {
         output?.didPullToRefresh()
     }
     
+    @objc private func didTapAdd() {
+        output?.didTapCreateTask()
+    }
 }
 
 // MARK: - TaskListViewInput
@@ -88,7 +97,12 @@ extension TaskListViewController: TaskListViewInput {
         }
     }
     
-    func updateTasks(tasks: [TaskModel]) { }
+    func updateTasks(tasks: [TaskModel]) {
+        self.tasks = tasks
+        UIView.performWithoutAnimation {
+            tableView.reloadData()
+        }
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -98,7 +112,7 @@ extension TaskListViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return section == 0 ? 1 : tasks.count
     }
@@ -106,7 +120,7 @@ extension TaskListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: TaskListFilterCell.cellIdentifier,
-                                                                for: indexPath) as? TaskListFilterCell else {
+                                                           for: indexPath) as? TaskListFilterCell else {
                 return UITableViewCell()
             }
             
@@ -114,7 +128,15 @@ extension TaskListViewController: UITableViewDataSource {
             cell.configure(with: .init(selectedType: selectedFilter))
             return cell
         } else {
-            return UITableViewCell()
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: TaskListCell.cellIdentifier,
+                                                           for: indexPath) as? TaskListCell else {
+                return UITableViewCell()
+            }
+            
+            cell.delegate = output
+            let task = tasks[indexPath.item]
+            cell.configure(with: .init(task: task))
+            return cell
         }
     }
 }

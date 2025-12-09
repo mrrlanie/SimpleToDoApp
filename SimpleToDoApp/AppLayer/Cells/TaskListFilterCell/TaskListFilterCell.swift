@@ -57,6 +57,7 @@ final class TaskListFilterCell: UITableViewCell {
         super.prepareForReuse()
         for view in stackView.arrangedSubviews {
             stackView.removeArrangedSubview(view)
+            view.removeFromSuperview()
         }
     }
     
@@ -67,7 +68,7 @@ final class TaskListFilterCell: UITableViewCell {
         contentView.addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(16)
-            make.leading.trailing.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(16)
         }
         
         containerView.addSubview(scrollView)
@@ -87,6 +88,7 @@ final class TaskListFilterCell: UITableViewCell {
     func configure(with model: TaskListFilterCellUIModel) {
         for view in stackView.arrangedSubviews {
             stackView.removeArrangedSubview(view)
+            view.removeFromSuperview()
         }
         
         let filterAllView = TaskListFilterEntity()

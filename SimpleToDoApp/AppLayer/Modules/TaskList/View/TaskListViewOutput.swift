@@ -9,10 +9,11 @@ import Foundation
 
 // MARK: - TaskListViewOutput
 
-protocol TaskListViewOutput: AnyObject, TaskListFilterCellDelegate {
+protocol TaskListViewOutput: AnyObject,
+                             TaskListFilterCellDelegate,
+                             TaskListCellDelegate {
     
     func viewDidLoad()
-    func didTapTask(taskIndex: Int)
     func didTapCreateTask()
     func didPullToRefresh()
 }

@@ -14,13 +14,14 @@ class TaskListConfigurator {
     
     func configure() -> UIViewController {
         let view = TaskListViewController()
-//        let interactor = MainInteractor()
-//        let router = MainRouter()
-//        
-        let presenter = TaskListPresenter(view: view)
-//        
+        let interactor = TaskListInteractor()
+        //        let router = MainRouter()
+        //
+        let presenter = TaskListPresenter(view: view,
+                                          interactor: interactor)
+        
         view.output = presenter
-//        interactor.output = presenter
+        interactor.output = presenter
         return view
     }
 }
