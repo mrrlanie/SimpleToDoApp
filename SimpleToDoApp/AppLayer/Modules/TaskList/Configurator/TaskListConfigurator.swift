@@ -15,10 +15,10 @@ class TaskListConfigurator {
     func configure() -> UIViewController {
         let view = TaskListViewController()
         let interactor = TaskListInteractor()
-        //        let router = MainRouter()
-        //
+        let router = TaskListRouter(transitionHandler: view.navigationController)
         let presenter = TaskListPresenter(view: view,
-                                          interactor: interactor)
+                                          interactor: interactor,
+                                          router: router)
         
         view.output = presenter
         interactor.output = presenter

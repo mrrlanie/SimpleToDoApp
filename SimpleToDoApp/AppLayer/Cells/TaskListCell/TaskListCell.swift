@@ -18,6 +18,10 @@ final class TaskListCell: UITableViewCell {
     static let cellIdentifier = "TaskListCell"
     weak var delegate: TaskListCellDelegate?
     
+    // MARK: - Private properties
+    
+    fileprivate var taskId: Int?
+    
     // MARK: - UI
     
     fileprivate lazy var containerView: UIView = {
@@ -60,6 +64,8 @@ final class TaskListCell: UITableViewCell {
     private func commonInit() {
         selectionStyle = .none
         contentView.addSubview(containerView)
+        containerView.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                                  action: #selector(didTapOnTask)))
         containerView.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(12)
             make.leading.trailing.equalToSuperview().inset(16)
@@ -83,6 +89,7 @@ final class TaskListCell: UITableViewCell {
     // MARK: - Public functions
     
     func configure(with model: TaskListCellUIModel) {
+        taskId = model.task.taskId
         titleLabel.text = model.task.taskName
         dueDateAtLabel.text = model.task.dueDate.formatted()
         if model.task.dueDate < .now && model.task.taskState == .opened {
@@ -95,6 +102,9 @@ final class TaskListCell: UITableViewCell {
     // MARK: - Actions
     
     @objc private func didTapOnTask() {
-        delegate?.didTapOnCell(cell: self)
+        guard let taskId else {
+            return
+        }
+        delegate?.didTapOnCell(taskId: taskId)
     }
 }

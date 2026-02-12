@@ -30,6 +30,7 @@ final class TaskListFilterCell: UITableViewCell {
         let view = UIScrollView()
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
+        view.contentInset = .init(top: 0, left: 16, bottom: 0, right: 16)
         view.delegate = self
         return view
     }()
@@ -68,7 +69,7 @@ final class TaskListFilterCell: UITableViewCell {
         contentView.addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(16)
-            make.leading.trailing.equalToSuperview().inset(16)
+            make.leading.trailing.equalToSuperview()
         }
         
         containerView.addSubview(scrollView)

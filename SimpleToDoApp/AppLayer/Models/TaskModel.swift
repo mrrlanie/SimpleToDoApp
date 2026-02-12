@@ -11,6 +11,7 @@ import Foundation
 
 struct TaskModel {
     
+    let taskId: Int
     let taskName: String
     let taskDescription: String
     let createdAt: Date

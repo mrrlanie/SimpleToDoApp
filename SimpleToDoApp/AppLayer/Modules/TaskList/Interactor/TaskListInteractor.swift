@@ -11,11 +11,11 @@ import Foundation
 
 final class TaskListInteractor: TaskListInteractorInput {
     
-    // MARK: - Public Properties
+    // MARK: - Public properties
     
     weak var output: TaskListInteractorOutput?
     
-    // MARK: - Private functions
+    // MARK: - Private properties
     
     private var data: [TaskModel] = []
     
@@ -53,7 +53,8 @@ final class TaskListInteractor: TaskListInteractorInput {
             
             let state = TaskState.allCases.randomElement() ?? .opened
             
-            data.append(.init(taskName: name,
+            data.append(.init(taskId: index,
+                              taskName: name,
                               taskDescription: description,
                               createdAt: createdAt,
                               dueDate: dueDate,

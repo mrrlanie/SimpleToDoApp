@@ -15,13 +15,16 @@ final class TaskListPresenter: TaskListViewOutput {
     
     private var view: TaskListViewInput
     private var interactor: TaskListInteractorInput
+    private var router: TaskListRouterInput
     
     // MARK: - Init
     
     init(view: TaskListViewInput,
-         interactor: TaskListInteractorInput) {
+         interactor: TaskListInteractorInput,
+         router: TaskListRouterInput) {
         self.view = view
         self.interactor = interactor
+        self.router = router
     }
     
     func viewDidLoad() {
@@ -61,6 +64,8 @@ extension TaskListPresenter: TaskListFilterCellDelegate {
 
 extension TaskListPresenter: TaskListCellDelegate {
     
-    func didTapOnCell(cell: TaskListCell) { }
+    func didTapOnCell(taskId: Int) {
+        print(taskId)
+    }
 }
 

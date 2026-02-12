@@ -9,5 +9,5 @@
 
 protocol TaskListCellDelegate: AnyObject {
     
-    func didTapOnCell(cell: TaskListCell)
+    func didTapOnCell(taskId: Int)
 }
